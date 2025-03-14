@@ -1,0 +1,63 @@
+/* Container for the leads page */
+.leadsContainer {
+  padding: 2rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Table styles */
+.leadsTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+}
+
+.leadsTable th,
+.leadsTable td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.leadsTable th {
+  color: #b6b6b6;
+}
+
+.leadsTable tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.leadsTable tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Button styles */
+.statusButton {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  text-align: center;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+/* Heading styles */
+h1.title {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+table.leadsTable {
+  margin-top: 1.5rem;
+  width: 100%;
+  table-layout: fixed;
+}
+
+td.tableData,
+th.tableHeader {
+  word-wrap: break-word;
+}

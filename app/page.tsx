@@ -1,10 +1,21 @@
 "use client";
-import { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 // import { useRouter } from "next/router";
 import styles from "./page.module.css";
+import Link from "next/link";
+
+interface FormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  linkedIn: string;
+  visas: string[];
+  resume: File | null;
+  additionalInfo: string;
+}
 
 export default function Home() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
     email: "",
@@ -14,19 +25,24 @@ export default function Home() {
     additionalInfo: "",
   });
 
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState<string>("");
   // const router = useRouter();
 
-  const handleChange = (e) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleFileChange = (e) => {
-    setFormData({ ...formData, resume: e.target.files[0] });
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      resume: e.target.files ? e.target.files[0] : null,
+    });
   };
 
-  const handleMultiSelectChange = (e) => {
+  const handleMultiSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const options = Array.from(
       e.target.selectedOptions,
       (option) => option.value
@@ -34,7 +50,7 @@ export default function Home() {
     setFormData({ ...formData, visas: options });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     // Simple validation
@@ -49,11 +65,21 @@ export default function Home() {
     }
 
     const formPayload = new FormData();
+
     Object.keys(formData).forEach((key) => {
-      if (key === "visas") {
-        formData[key].forEach((visa) => formPayload.append("visas", visa));
-      } else {
-        formPayload.append(key, formData[key]);
+      const value = formData[key as keyof FormData];
+
+      if (key === "visas" && value) {
+        // Ensure 'visas' is an array and append each item separately
+        (value as string[]).forEach((visa) =>
+          formPayload.append("visas", visa)
+        );
+      } else if (value instanceof File) {
+        // Ensure resume is a File and append it correctly
+        formPayload.append(key, value as File);
+      } else if (value !== null) {
+        // Append all other values as strings
+        formPayload.append(key, value as string);
       }
     });
 
@@ -151,6 +177,8 @@ export default function Home() {
           ></textarea>
           <button type="submit">Submit</button>
           {message && <p>{message}</p>}
+
+          <Link href="/leads">Go to Leads Page</Link>
         </form>
       </div>
     </>
